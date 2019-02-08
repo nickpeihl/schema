@@ -57,7 +57,9 @@ function analyze( suite, t, analyzer, comment, text, expected ){
       analyzer: analyzer,
       text: text
     }, function( err, res ){
-      if( err ) console.error( err );
+      if( err ) {
+        console.error( err );
+      }
       t.deepEqual( simpleTokens( res.tokens ), expected, comment );
       done();
     });

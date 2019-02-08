@@ -45,7 +45,7 @@ client.nodes.info( null, function( err, res ){
 
       // bool, is the plugin currently installed?
       var isInstalled = !!node.plugins.filter( function( installedPlugin ){
-        return installedPlugin.name == plugin;
+        return installedPlugin.name === plugin;
       }).length;
 
       // output status to terminal
@@ -74,7 +74,7 @@ client.nodes.info( null, function( err, res ){
       });
     });
     console.error( "\n\033[1;37mnote:\033[0m some plugins may require you to restart elasticsearch.\n");
-    process.exit(1)
+    process.exit(1);
   }
 
   console.log();
