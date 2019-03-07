@@ -16,9 +16,8 @@ module.exports.tests.functional = function(test, common){
     // index a document with all admin values
     suite.action( function( done ){
       suite.client.index({
-        index: suite.props.index, type: 'test',
-        id: '1', body: { admin: {
-          alpha3: 'TST',
+        index: suite.props.index, type: 'doc',
+        id: '1', body: { parent: {
           country: 'Test Country',
           country_a: 'TestCountry',
           country_id: '100',
@@ -41,25 +40,11 @@ module.exports.tests.functional = function(test, common){
       }, done );
     });
 
-    // search by alpha3
-    suite.assert( function( done ){
-      suite.client.search({
-        index: suite.props.index,
-        type: 'test',
-        body: { query: { match: { 'admin.alpha3': 'TST' } } }
-      }, function( err, res ){
-        t.equal( err, undefined );
-        t.equal( res.hits.total, 1, 'document found' );
-        done();
-      });
-    });
-
     // search by country
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        type: 'test',
-        body: { query: { match: { 'admin.country': 'Test Country' } } }
+        body: { query: { match: { 'parent.country': 'Test Country' } } }
       }, function( err, res ){
         t.equal( err, undefined );
         t.equal( res.hits.total, 1, 'document found' );
@@ -71,8 +56,7 @@ module.exports.tests.functional = function(test, common){
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        type: 'test',
-        body: { query: { match: { 'admin.country_a': 'TestCountry' } } }
+        body: { query: { match: { 'parent.country_a': 'TestCountry' } } }
       }, function( err, res ){
         t.equal( err, undefined );
         t.equal( res.hits.total, 1, 'document found' );
@@ -84,8 +68,7 @@ module.exports.tests.functional = function(test, common){
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        type: 'test',
-        body: { query: { match: { 'admin.country_id': '100' } } }
+        body: { query: { match: { 'parent.country_id': '100' } } }
       }, function( err, res ){
         t.equal( err, undefined );
         t.equal( res.hits.total, 1, 'document found' );
@@ -93,7 +76,7 @@ module.exports.tests.functional = function(test, common){
       });
     });
 
-    // ... the remaining admin fields are identical and so their assertions
+    // ... the remaining parent fields are identical and so their assertions
     // have been omitted for the sake of brevity.
 
     suite.run( t.end );
@@ -103,7 +86,7 @@ module.exports.tests.functional = function(test, common){
 module.exports.all = function (tape, common) {
 
   function test(name, testFunction) {
-    return tape('admin matching: ' + name, testFunction);
+    return tape('parent matching: ' + name, testFunction);
   }
 
   for( var testCase in module.exports.tests ){

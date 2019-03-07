@@ -22,7 +22,7 @@ module.exports.tests.index_expanded_form_search_contracted = function(test, comm
     suite.action( function( done ){
       suite.client.index({
         index: suite.props.index,
-        type: 'test',
+        type: 'doc',
         id: '1',
         body: { name: { default: 'Grolmanstraße' } }
       }, done);
@@ -32,7 +32,6 @@ module.exports.tests.index_expanded_form_search_contracted = function(test, comm
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        type: 'test',
         body: { query: { match: {
           'name.default': {
             'analyzer': 'peliasQueryPartialToken',
@@ -50,7 +49,6 @@ module.exports.tests.index_expanded_form_search_contracted = function(test, comm
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        type: 'test',
         body: { query: { match: {
           'name.default': {
             'analyzer': 'peliasQueryFullToken',
@@ -79,7 +77,7 @@ module.exports.tests.index_contracted_form_search_expanded = function(test, comm
     suite.action( function( done ){
       suite.client.index({
         index: suite.props.index,
-        type: 'test',
+        type: 'doc',
         id: '1',
         body: { name: { default: 'Grolmanstr.' } }
       }, done);

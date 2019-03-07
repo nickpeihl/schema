@@ -52,7 +52,7 @@ module.exports.tests.interface = function(test, common) {
   });
 
   test('config with non-object esclient should throw error', function(t) {
-    [null, 17, [], 'string', true].forEach((value) => {
+    [null, 17, [], 'text', true].forEach((value) => {
       var config = {
         schema: {
           indexName: 'index name'

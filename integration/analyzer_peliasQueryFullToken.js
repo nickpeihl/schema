@@ -142,7 +142,7 @@ module.exports.tests.slop = function(test, common){
     suite.action( function( done ){
       suite.client.index({
         index: suite.props.index,
-        type: 'test',
+        type: 'doc',
         id: '1',
         body: { name: { default: '52 Görlitzer Straße' } }
       }, done);
@@ -155,12 +155,10 @@ module.exports.tests.slop = function(test, common){
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        type: 'test',
-        body: { query: { match: {
+        body: { query: { match_phrase: {
           'name.default': {
             'analyzer': 'peliasQueryFullToken',
             'query': 'Görlitzer Straße 52',
-            'type': 'phrase',
             'slop': 3,
           }
         }}}
@@ -245,8 +243,10 @@ function analyze( suite, t, analyzer, comment, text, expected ){
   suite.assert( function( done ){
     suite.client.indices.analyze({
       index: suite.props.index,
-      analyzer: analyzer,
-      text: text
+      body: {
+        analyzer: analyzer,
+        text: text
+      }
     }, function( err, res ){
       if( err ) console.error( err );
       t.deepEqual( simpleTokens( res.tokens ), expected, comment );

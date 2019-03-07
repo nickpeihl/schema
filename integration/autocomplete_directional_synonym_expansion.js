@@ -22,7 +22,7 @@ module.exports.tests.index_and_retrieve_expanded_form = function(test, common){
     suite.action( function( done ){
       suite.client.index({
         index: suite.props.index,
-        type: 'test',
+        type: 'doc',
         id: '1',
         body: { name: { default: 'north' } }
       }, done);
@@ -32,7 +32,6 @@ module.exports.tests.index_and_retrieve_expanded_form = function(test, common){
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        type: 'test',
         body: { query: { match: {
           'name.default': {
             'analyzer': 'peliasQueryPartialToken',
@@ -50,7 +49,6 @@ module.exports.tests.index_and_retrieve_expanded_form = function(test, common){
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        type: 'test',
         body: { query: { match: {
           'name.default': {
             'analyzer': 'peliasQueryFullToken',
@@ -79,7 +77,7 @@ module.exports.tests.index_and_retrieve_contracted_form = function(test, common)
     suite.action( function( done ){
       suite.client.index({
         index: suite.props.index,
-        type: 'test',
+        type: 'doc',
         id: '1',
         body: { name: { default: 'n' } }
       }, done);
@@ -89,7 +87,6 @@ module.exports.tests.index_and_retrieve_contracted_form = function(test, common)
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        type: 'test',
         body: { query: { match: {
           'name.default': {
             'analyzer': 'peliasQueryPartialToken',
@@ -107,7 +104,6 @@ module.exports.tests.index_and_retrieve_contracted_form = function(test, common)
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        type: 'test',
         body: { query: { match: {
           'name.default': {
             'analyzer': 'peliasQueryFullToken',
@@ -136,7 +132,7 @@ module.exports.tests.index_and_retrieve_mixed_form_1 = function(test, common){
     suite.action( function( done ){
       suite.client.index({
         index: suite.props.index,
-        type: 'test',
+        type: 'doc',
         id: '1',
         body: { name: { default: 'n' } }
       }, done);
@@ -146,7 +142,6 @@ module.exports.tests.index_and_retrieve_mixed_form_1 = function(test, common){
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        type: 'test',
         body: { query: { match: {
           'name.default': {
             'analyzer': 'peliasQueryPartialToken',
@@ -164,7 +159,6 @@ module.exports.tests.index_and_retrieve_mixed_form_1 = function(test, common){
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        type: 'test',
         body: { query: { match: {
           'name.default': {
             'analyzer': 'peliasQueryFullToken',
@@ -193,7 +187,7 @@ module.exports.tests.index_and_retrieve_mixed_form_2 = function(test, common){
     suite.action( function( done ){
       suite.client.index({
         index: suite.props.index,
-        type: 'test',
+        type: 'doc',
         id: '1',
         body: { name: { default: 'north' } }
       }, done);
@@ -203,7 +197,6 @@ module.exports.tests.index_and_retrieve_mixed_form_2 = function(test, common){
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        type: 'test',
         body: { query: { match: {
           'name.default': {
             'analyzer': 'peliasQueryPartialToken',
@@ -221,7 +214,6 @@ module.exports.tests.index_and_retrieve_mixed_form_2 = function(test, common){
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        type: 'test',
         body: { query: { match: {
           'name.default': {
             'analyzer': 'peliasQueryFullToken',

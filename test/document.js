@@ -46,28 +46,28 @@ module.exports.tests.address_analysis = function(test, common) {
   // $name analysis is pretty basic, work can be done to improve this, although
   // at time of writing this field was not used by any API queries.
   test('name', function(t) {
-    t.equal(prop.name.type, 'string');
+    t.equal(prop.name.type, 'text');
     t.equal(prop.name.analyzer, 'keyword');
     t.end();
   });
 
   // $unit analysis
   test('unit', function(t) {
-    t.equal(prop.unit.type, 'string');
+    t.equal(prop.unit.type, 'text');
     t.equal(prop.unit.analyzer, 'peliasUnit');
     t.end();
   });
 
   // $number analysis is discussed in: https://github.com/pelias/schema/pull/77
   test('number', function(t) {
-    t.equal(prop.number.type, 'string');
+    t.equal(prop.number.type, 'text');
     t.equal(prop.number.analyzer, 'peliasHousenumber');
     t.end();
   });
 
   // $street analysis is discussed in: https://github.com/pelias/schema/pull/77
   test('street', function(t) {
-    t.equal(prop.street.type, 'string');
+    t.equal(prop.street.type, 'text');
     t.equal(prop.street.analyzer, 'peliasStreet');
     t.end();
   });
@@ -76,7 +76,7 @@ module.exports.tests.address_analysis = function(test, common) {
   // note: this is a poor name, it would be better to rename this field to a more
   // generic term such as $postalcode as it is not specific to the USA.
   test('zip', function(t) {
-    t.equal(prop.zip.type, 'string');
+    t.equal(prop.zip.type, 'text');
     t.equal(prop.zip.analyzer, 'peliasZip');
     t.end();
   });
@@ -96,7 +96,9 @@ module.exports.tests.parent_fields = function(test, common) {
     'locality',       'locality_a',       'locality_id',
     'borough',        'borough_a',        'borough_id',
     'localadmin',     'localadmin_a',     'localadmin_id',
+    'marinearea',     'marinearea_a',     'marinearea_id',
     'neighbourhood',  'neighbourhood_a',  'neighbourhood_id',
+    'ocean',          'ocean_a',          'ocean_id',
     'postalcode',     'postalcode_a',     'postalcode_id'
   ];
   test('parent fields specified', function(t) {
@@ -112,11 +114,11 @@ module.exports.tests.parent_analysis = function(test, common) {
   var fields = ['country','region','county','locality','localadmin','neighbourhood'];
   fields.forEach( function( field ){
     test(field, function(t) {
-      t.equal(prop[field].type, 'string');
+      t.equal(prop[field].type, 'text');
       t.equal(prop[field].analyzer, 'peliasAdmin');
-      t.equal(prop[field+'_a'].type, 'string');
+      t.equal(prop[field+'_a'].type, 'text');
       t.equal(prop[field+'_a'].analyzer, 'peliasAdmin');
-      t.equal(prop[field+'_id'].type, 'string');
+      t.equal(prop[field+'_id'].type, 'text');
       t.equal(prop[field+'_id'].analyzer, 'keyword');
 
       t.end();
@@ -124,11 +126,11 @@ module.exports.tests.parent_analysis = function(test, common) {
   });
 
   test('postalcode', function(t) {
-    t.equal(prop['postalcode'].type, 'string');
+    t.equal(prop['postalcode'].type, 'text');
     t.equal(prop['postalcode'].analyzer, 'peliasZip');
-    t.equal(prop['postalcode'+'_a'].type, 'string');
+    t.equal(prop['postalcode'+'_a'].type, 'text');
     t.equal(prop['postalcode'+'_a'].analyzer, 'peliasZip');
-    t.equal(prop['postalcode'+'_id'].type, 'string');
+    t.equal(prop['postalcode'+'_id'].type, 'text');
     t.equal(prop['postalcode'+'_id'].analyzer, 'keyword');
 
     t.end();
@@ -138,7 +140,7 @@ module.exports.tests.parent_analysis = function(test, common) {
 module.exports.tests.alpha3_analysis = function(test, common) {
   var prop = schema.properties.alpha3;
   test('alpha3', function(t) {
-    t.equal(prop.type, 'string');
+    t.equal(prop.type, 'text');
     t.equal(prop.analyzer, 'peliasAdmin');
     t.end();
   });
@@ -151,11 +153,8 @@ module.exports.tests.dynamic_templates = function(test, common) {
     t.equal(template.path_match, 'name.*');
     t.equal(template.match_mapping_type, 'string');
     t.deepEqual(template.mapping, {
-      type: 'string',
-      analyzer: 'peliasIndexOneEdgeGram',
-      fielddata: {
-        loading: 'eager_global_ordinals'
-      }
+      type: 'text',
+      analyzer: 'peliasIndexOneEdgeGram'
     });
     t.end();
   });
@@ -165,11 +164,8 @@ module.exports.tests.dynamic_templates = function(test, common) {
     t.equal(template.path_match, 'phrase.*');
     t.equal(template.match_mapping_type, 'string');
     t.deepEqual(template.mapping, {
-      type: 'string',
-      analyzer: 'peliasPhrase',
-      fielddata: {
-        loading: 'eager_global_ordinals'
-      }
+      type: 'text',
+      analyzer: 'peliasPhrase'
     });
     t.end();
   });

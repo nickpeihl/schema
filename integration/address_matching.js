@@ -16,7 +16,7 @@ module.exports.tests.functional = function(test, common){
     // index some docs
     suite.action( function( done ){
       suite.client.index({
-        index: suite.props.index, type: 'test',
+        index: suite.props.index, type: 'doc',
         id: '1', body: { address_parts: {
           name: 'Mapzen HQ',
           number: 30,
@@ -28,7 +28,7 @@ module.exports.tests.functional = function(test, common){
 
     suite.action( function( done ){
       suite.client.index({
-        index: suite.props.index, type: 'test',
+        index: suite.props.index, type: 'doc',
         id: '2', body: { address_parts: {
           name: 'Fake Venue',
           number: 300,
@@ -40,7 +40,7 @@ module.exports.tests.functional = function(test, common){
 
     suite.action( function( done ){
       suite.client.index({
-        index: suite.props.index, type: 'test',
+        index: suite.props.index, type: 'doc',
         id: '3', body: { address_parts: {
           name: 'Mock British Address',
           number: 3000,
@@ -54,7 +54,6 @@ module.exports.tests.functional = function(test, common){
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        type: 'test',
         body: { query: { bool: { must: [
           { match: { 'address_parts.number': 30 } }
         ]}}}
@@ -69,7 +68,6 @@ module.exports.tests.functional = function(test, common){
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        type: 'test',
         body: { query: { bool: { must: [
           { match: { 'address_parts.street': 'west 26th street' } }
         ]}}}
@@ -84,7 +82,6 @@ module.exports.tests.functional = function(test, common){
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        type: 'test',
         body: { query: { bool: { must: [
           { match: { 'address_parts.street': 'W 26th ST' } }
         ]}}}
@@ -99,7 +96,6 @@ module.exports.tests.functional = function(test, common){
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        type: 'test',
         body: { query: { bool: { must: [
           { match: { 'address_parts.zip': '10010' } }
         ]}}}
@@ -114,7 +110,6 @@ module.exports.tests.functional = function(test, common){
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        type: 'test',
         body: { query: { bool: { must: [
           { match: { 'address_parts.zip': 'e24dn' } }
         ]}}}
@@ -129,7 +124,6 @@ module.exports.tests.functional = function(test, common){
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        type: 'test',
         body: { query: { bool: { must: [
           { match: { 'address_parts.zip': '100-10' } }
         ]}}}
@@ -144,7 +138,6 @@ module.exports.tests.functional = function(test, common){
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        type: 'test',
         body: { query: { bool: { must: [
           { match: { 'address_parts.zip': '10 0 10' } }
         ]}}}
@@ -159,7 +152,6 @@ module.exports.tests.functional = function(test, common){
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        type: 'test',
         body: { query: { bool: { must: [
           { match: { 'address_parts.zip': 'E2-4DN' } }
         ]}}}
@@ -174,7 +166,6 @@ module.exports.tests.functional = function(test, common){
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        type: 'test',
         body: { query: { bool: { must: [
           { match: { 'address_parts.zip': 'E2  4DN' } }
         ]}}}

@@ -168,8 +168,10 @@ function analyze( suite, t, analyzer, comment, text, expected, includePosition )
   suite.assert( function( done ){
     suite.client.indices.analyze({
       index: suite.props.index,
-      analyzer: analyzer,
-      text: text
+      body: {
+        analyzer: analyzer,
+        text: text
+      }
     }, function( err, res ){
       if( err ){ console.error( err ); }
       t.deepEqual( simpleTokens( res.tokens, includePosition ), expected, comment );

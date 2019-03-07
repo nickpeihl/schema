@@ -24,23 +24,23 @@ var schema = {
       dynamic: 'strict',
       properties: {
         name: {
-          type: 'string',
+          type: 'text',
           analyzer: 'keyword',
         },
         unit: {
-          type: 'string',
+          type: 'text',
           analyzer: 'peliasUnit',
         },
         number: {
-          type: 'string',
+          type: 'text',
           analyzer: 'peliasHousenumber',
         },
         street: {
-          type: 'string',
+          type: 'text',
           analyzer: 'peliasStreet',
         },
         zip: {
-          type: 'string',
+          type: 'text',
           analyzer: 'peliasZip',
         }
       }
@@ -106,10 +106,20 @@ var schema = {
         localadmin_a: admin,
         localadmin_id: literal,
 
+        // https://github.com/whosonfirst/whosonfirst-placetypes#marinearea
+        marinearea: admin,
+        marinearea_a: admin,
+        marinearea_id: literal,
+
         // https://github.com/whosonfirst/whosonfirst-placetypes#neighbourhood
         neighbourhood: admin,
         neighbourhood_a: admin,
         neighbourhood_id: literal,
+
+        // https://github.com/whosonfirst/whosonfirst-placetypes#ocean
+        ocean: admin,
+        ocean_a: admin,
+        ocean_id: literal,
 
         // https://github.com/whosonfirst/whosonfirst-placetypes#postalcode
         postalcode: postalcode,
@@ -134,11 +144,8 @@ var schema = {
       path_match: 'name.*',
       match_mapping_type: 'string',
       mapping: {
-        type: 'string',
-        analyzer: 'peliasIndexOneEdgeGram',
-        fielddata : {
-          loading: 'eager_global_ordinals'
-        }
+        type: 'text',
+        analyzer: 'peliasIndexOneEdgeGram'
       }
     },
   },{
@@ -146,11 +153,8 @@ var schema = {
       path_match: 'phrase.*',
       match_mapping_type: 'string',
       mapping: {
-        type: 'string',
-        analyzer: 'peliasPhrase',
-        fielddata : {
-          loading: 'eager_global_ordinals'
-        }
+        type: 'text',
+        analyzer: 'peliasPhrase'
       }
     }
   }],

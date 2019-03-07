@@ -13,14 +13,14 @@ module.exports.tests.compile = function(test, common) {
 // this should never need to change
 module.exports.tests.type = function(test, common) {
   test('correct type', function(t) {
-    t.equal(schema.type, 'string', 'correct value');
+    t.equal(schema.type, 'text', 'correct value');
     t.end();
   });
 };
 
 module.exports.tests.store = function(test, common) {
   test('store enabled', function(t) {
-    t.equal(schema.store, 'yes', 'correct value');
+    t.equal(schema.store, true, 'correct value');
     t.end();
   });
 };
