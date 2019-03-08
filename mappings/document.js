@@ -41,7 +41,7 @@ var schema = {
           analyzer: 'peliasStreet',
         },
         cross_street: {
-          type: 'string',
+          type: 'text',
           analyzer: 'peliasStreet',
         },
         zip: {
@@ -169,7 +169,7 @@ var schema = {
   },{
     phrase: {
       path_match: 'phrase.*',
-      match_mapping_type: 'text',
+      match_mapping_type: 'string',
       mapping: {
         type: 'text',
         analyzer: 'peliasPhrase'
@@ -178,7 +178,7 @@ var schema = {
   },{
     addendum: {
       path_match: 'addendum.*',
-      match_mapping_type: 'text',
+      match_mapping_type: 'string',
       mapping: {
         type: 'text',
         index: false,
