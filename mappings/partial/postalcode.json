@@ -1,5 +1,4 @@
 {
   "type": "text",
-  "analyzer": "peliasZip",
-  "store": true
+  "analyzer": "peliasZip"
 }

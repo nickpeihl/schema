@@ -19,16 +19,17 @@ module.exports.tests.type = function(test, common) {
 };
 
 module.exports.tests.store = function(test, common) {
-  test('store enabled', function(t) {
-    t.equal(schema.store, true, 'correct value');
+  test('store unset (will not be stored)', function(t) {
+    t.equal(schema.store, undefined, 'unset');
     t.end();
   });
 };
 
 // do not perform analysis on categories
+// https://www.elastic.co/blog/strings-are-dead-long-live-strings
 module.exports.tests.analysis = function(test, common) {
-  test('index analysis', function(t) {
-    t.equal(schema.analyzer, 'keyword', 'should be keyword');
+  test('index analysis set to keyword', function(t) {
+    t.equal(schema.analyzer, 'keyword', 'should be a keyword');
     t.end();
   });
 };

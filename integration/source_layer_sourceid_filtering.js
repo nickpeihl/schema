@@ -10,7 +10,7 @@ module.exports.tests = {};
 module.exports.tests.source_filter = function(test, common){
   test( 'source filter', function(t){
 
-    var suite = new elastictest.Suite( null, { schema: schema } );
+    var suite = new elastictest.Suite( common.clientOpts, { schema: schema } );
     suite.action( function( done ){ setTimeout( done, 500 ); }); // wait for es to bring some shards up
 
     // index some docs
@@ -46,9 +46,11 @@ module.exports.tests.source_filter = function(test, common){
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        body: { query: { bool: { must: [
-          { term: { source: 'osm' } }
-        ]}}}
+        body: { query: {
+          term: {
+            source: 'osm'
+          }
+        }}
       }, function( err, res ){
         t.equal( res.hits.total, 2 );
         done();
@@ -59,9 +61,11 @@ module.exports.tests.source_filter = function(test, common){
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        body: { query: { bool: { must: [
-          { term: { layer: 'address' } }
-        ]}}}
+        body: { query: {
+          term: {
+            layer: 'address'
+          }
+        }}
       }, function( err, res ){
         t.equal( res.hits.total, 2 );
         done();
@@ -72,9 +76,11 @@ module.exports.tests.source_filter = function(test, common){
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        body: { query: { bool: { must: [
-          { term: { source_id: 'dataset/1' } }
-        ]}}}
+        body: { query: {
+          term: {
+            source_id: 'dataset/1'
+          }
+        }}
       }, function( err, res ){
         t.equal( res.hits.total, 2 );
         done();
@@ -99,9 +105,11 @@ module.exports.tests.source_filter = function(test, common){
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        body: { query: { bool: { must: [
-          { term: { source: 'OSM' } }
-        ]}}}
+        body: { query: {
+          term: {
+            source: 'OSM'
+          }
+        }}
       }, function( err, res ){
         t.equal( res.hits.total, 0 );
         done();
@@ -112,9 +120,11 @@ module.exports.tests.source_filter = function(test, common){
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        body: { query: { bool: { must: [
-          { term: { source: 'foo' } }
-        ]}}}
+        body: { query: {
+          term: {
+            source: 'foo'
+          }
+        }}
       }, function( err, res ){
         t.equal( res.hits.total, 0 );
         done();
@@ -125,9 +135,11 @@ module.exports.tests.source_filter = function(test, common){
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        body: { query: { bool: { must: [
-          { term: { source: 'foo bar baz' } }
-        ]}}}
+        body: { query: {
+          term: {
+            source: 'foo bar baz'
+          }
+        }}
       }, function( err, res ){
         t.equal( res.hits.total, 1 );
         done();

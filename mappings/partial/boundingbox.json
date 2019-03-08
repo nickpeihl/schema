@@ -1,5 +1,4 @@
 {
   "type": "text",
-  "index": false,
-  "store": true
+  "index": false
 }

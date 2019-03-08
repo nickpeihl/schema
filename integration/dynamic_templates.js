@@ -8,14 +8,14 @@ module.exports.tests = {};
 
 // 'admin' mappings have a different 'name' dynamic_template to the other types
 module.exports.tests.dynamic_templates_name = function(test, common){
-  test( 'admin->name', nameAssertion( 'doc', 'peliasIndexOneEdgeGram' ) );
-  test( 'document->name', nameAssertion( 'doc', 'peliasIndexOneEdgeGram' ) );
+  test( 'admin->name', nameAssertion( 'doc', 'peliasIndexOneEdgeGram', common ) );
+  test( 'document->name', nameAssertion( 'doc', 'peliasIndexOneEdgeGram', common ) );
 };
 
 // all types share the same phrase mapping
 module.exports.tests.dynamic_templates_phrase = function(test, common){
-  test( 'admin->phrase', phraseAssertion( 'doc', 'peliasPhrase' ) );
-  test( 'document->phrase', phraseAssertion( 'doc', 'peliasPhrase' ) );
+  test( 'admin->phrase', phraseAssertion( 'doc', 'peliasPhrase', common ) );
+  test( 'document->phrase', phraseAssertion( 'doc', 'peliasPhrase', common ) );
 };
 
 module.exports.all = function (tape, common) {
@@ -29,10 +29,10 @@ module.exports.all = function (tape, common) {
   }
 };
 
-function nameAssertion( type, analyzer ){
+function nameAssertion( type, analyzer, common ){
   return function(t){
 
-    var suite = new elastictest.Suite( null, { schema: schema } );
+    var suite = new elastictest.Suite( common.clientOpts, { schema: schema } );
 
     // index a document from a normal document layer
     suite.action( function( done ){
@@ -63,10 +63,10 @@ function nameAssertion( type, analyzer ){
   };
 }
 
-function phraseAssertion( type, analyzer ){
+function phraseAssertion( type, analyzer, common ){
   return function(t){
 
-    var suite = new elastictest.Suite( null, { schema: schema } );
+    var suite = new elastictest.Suite( common.clientOpts, { schema: schema } );
 
     // index a document from a normal document layer
     suite.action( function( done ){
@@ -89,6 +89,72 @@ function phraseAssertion( type, analyzer ){
         var phraseProperties = properties.phrase.properties;
         t.equal( phraseProperties.default.analyzer, analyzer );
         t.equal( phraseProperties.alt.analyzer, analyzer );
+        done();
+      });
+    });
+
+    suite.run( t.end );
+  };
+}
+
+function addendumAssertion( type, namespace, value, common ){
+  return function(t){
+
+    var suite = new elastictest.Suite( common.clientOpts, { schema: schema } );
+
+    // index a document including the addendum
+    suite.action( function( done ){
+      suite.client.index({
+        index: suite.props.index,
+        type: type,
+        id: '1',
+        body: { addendum: { [namespace]: value } },
+      }, done );
+    });
+
+    // check dynamically created mapping has
+    // inherited from the dynamic_template
+    suite.assert( function( done ){
+      suite.client.indices.getMapping({ index: suite.props.index, type: type }, function( err, res ){
+
+        var properties = res[suite.props.index].mappings[type].properties;
+        t.equal( properties.addendum.dynamic, 'true' );
+
+        var addendumProperties = properties.addendum.properties;
+
+        t.true([
+          'string', // elasticsearch 2.4
+          'keyword' // elasticsearch 5.6
+        ].includes( addendumProperties[namespace].type ));
+
+        t.true([
+          'no', // elasticsearch 2.4
+          false // elasticsearch 5.6
+        ].includes( addendumProperties[namespace].index ));
+
+        // elasticsearch 2.4
+        if( addendumProperties[namespace].fielddata ){
+          t.equal( addendumProperties[namespace].fielddata.format, 'disabled' );
+        }
+
+        // elasticsearch 5.6
+        if( addendumProperties[namespace].doc_values ){
+          t.equal( addendumProperties[namespace].doc_values, false );
+        }
+
+        done();
+      });
+    });
+
+    // retrieve document and check addendum was stored verbatim
+    suite.assert( function( done ){
+      suite.client.get({
+        index: suite.props.index,
+        type: type,
+        id: 1
+      }, function( err, res ){
+        t.false( err );
+        t.equal( res._source.addendum[namespace], value );
         done();
       });
     });

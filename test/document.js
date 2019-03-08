@@ -20,9 +20,9 @@ module.exports.tests.properties = function(test, common) {
 
 // should contain the correct field definitions
 module.exports.tests.fields = function(test, common) {
-  var fields = ['source', 'layer', 'alpha3', 'name', 'phrase', 'address_parts',
+  var fields = ['source', 'layer', 'name', 'phrase', 'address_parts',
     'parent', 'center_point', 'shape', 'bounding_box', 'source_id', 'category',
-    'population', 'popularity'];
+    'population', 'popularity', 'addendum'];
   test('fields specified', function(t) {
     t.deepEqual(Object.keys(schema.properties), fields);
     t.end();
@@ -31,7 +31,7 @@ module.exports.tests.fields = function(test, common) {
 
 // should contain the correct address field definitions
 module.exports.tests.address_fields = function(test, common) {
-  var fields = ['name','unit','number','street','zip'];
+  var fields = ['name','unit','number','street','cross_street','zip'];
   test('address fields specified', function(t) {
     t.deepEqual(Object.keys(schema.properties.address_parts.properties), fields);
     t.end();
@@ -86,9 +86,11 @@ module.exports.tests.address_analysis = function(test, common) {
 module.exports.tests.parent_fields = function(test, common) {
   var fields = [
     'continent',      'continent_a',      'continent_id',
+    'ocean',          'ocean_a',          'ocean_id',
     'empire',         'empire_a',         'empire_id',
     'country',        'country_a',        'country_id',
     'dependency',     'dependency_a',     'dependency_id',
+    'marinearea',     'marinearea_a',     'marinearea_id',
     'macroregion',    'macroregion_a',    'macroregion_id',
     'region',         'region_a',         'region_id',
     'macrocounty',    'macrocounty_a',    'macrocounty_id',
@@ -96,9 +98,7 @@ module.exports.tests.parent_fields = function(test, common) {
     'locality',       'locality_a',       'locality_id',
     'borough',        'borough_a',        'borough_id',
     'localadmin',     'localadmin_a',     'localadmin_id',
-    'marinearea',     'marinearea_a',     'marinearea_id',
     'neighbourhood',  'neighbourhood_a',  'neighbourhood_id',
-    'ocean',          'ocean_a',          'ocean_id',
     'postalcode',     'postalcode_a',     'postalcode_id'
   ];
   test('parent fields specified', function(t) {
@@ -137,15 +137,6 @@ module.exports.tests.parent_analysis = function(test, common) {
   });
 };
 
-module.exports.tests.alpha3_analysis = function(test, common) {
-  var prop = schema.properties.alpha3;
-  test('alpha3', function(t) {
-    t.equal(prop.type, 'text');
-    t.equal(prop.analyzer, 'peliasAdmin');
-    t.end();
-  });
-};
-
 module.exports.tests.dynamic_templates = function(test, common) {
   test('dynamic_templates: nameGram', function(t) {
     t.equal(typeof schema.dynamic_templates[0].nameGram, 'object', 'nameGram template specified');
@@ -162,7 +153,7 @@ module.exports.tests.dynamic_templates = function(test, common) {
     t.equal(typeof schema.dynamic_templates[1].phrase, 'object', 'phrase template specified');
     var template = schema.dynamic_templates[1].phrase;
     t.equal(template.path_match, 'phrase.*');
-    t.equal(template.match_mapping_type, 'string');
+    t.equal(template.match_mapping_type, 'text');
     t.deepEqual(template.mapping, {
       type: 'text',
       analyzer: 'peliasPhrase'

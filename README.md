@@ -1,19 +1,39 @@
-## Installation
+>This repository is part of the [Pelias](https://github.com/pelias/pelias)
+>project. Pelias is an open-source, open-data geocoder originally sponsored by
+>[Mapzen](https://www.mapzen.com/). Our official user documentation is
+>[here](https://github.com/pelias/documentation).
+
+# Pelias Elasticsearch Schema Definition
+
+This package defines the Elasticsearch schema used by Pelias. Pelias requires quite a few settings for performance and accuracy. This repository contains those settings as well as useful tools to ensure they are applied correctly.
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/pelias/schema.svg)](https://greenkeeper.io/)
+[![NPM](https://nodei.co/npm/pelias-schema.png?downloads=true&stars=true)](https://nodei.co/npm/pelias-schema)
+[![Build Status](https://travis-ci.org/pelias/schema.png?branch=master)](https://travis-ci.org/pelias/schema)
+
+## Requirements
+
+See [Pelias Software requirements](https://github.com/pelias/documentation/blob/master/requirements.md) for general Pelias requirements.
+
+### Compatibility
+
+If using Elasticsearch 5, ensure you are using Node.js 8.15+ or Node.js 10.15+.
+
+Versions 8.14 and 10.14 fixed a security issue, but in the process [caused issues combined with deprecation headers sent by ES5](https://github.com/pelias/schema/pull/339). This precaution will no longer be necessary once Elasticsearch 2 support is removed.
+
+## Installation
 
 ```bash
 $ npm install pelias-schema
 ```
 
-[![NPM](https://nodei.co/npm/pelias-schema.png?downloads=true&stars=true)](https://nodei.co/npm/pelias-schema)
 
 ## Usage
 
 #### create index
 
 ```bash
-node scripts/create_index.js;               # quick start
+./bin/create_index                          # quick start
 ```
 
 #### drop index
@@ -115,55 +135,9 @@ $ npm run integration
 Download the image and start an elasticsearch docker container:
 
 ```bash
-$ docker run --name elastic-test -p 9200:9200 elasticsearch:2
+$ docker run --rm --name elastic-test -p 9200:9200 pelias/elasticsearch:5.6.12
 ```
-
-Once the service has started you will need to ensure the plugins are installed, in a new window:
-
-```bash
-$ node scripts/check_plugins.js
-
---------------------------------
- checking elasticsearch plugins
---------------------------------
-
-node 'Nebulon' [x5sGjG6lSc2lWMf_hd6NwA]
- checking plugin 'analysis-icu': ✖
-
-1 required plugin(s) are not installed on the node(s) shown above.
-you must install the plugins before continuing with the installation.
-
-you can install the missing packages on 'Nebulon' [172.17.0.2] with the following command(s):
-
- sudo /usr/share/elasticsearch/bin/plugin install analysis-icu
-
-note: some plugins may require you to restart elasticsearch.
-```
-
-While the docker container is still running, execute this in another window:
-
-```bash
-$ docker exec -it elastic-test /usr/share/elasticsearch/bin/plugin install analysis-icu
--> Installing analysis-icu...
-Trying https://download.elastic.co/elasticsearch/release/org/elasticsearch/plugin/analysis-icu/2.4.5/analysis-icu-2.4.5.zip ...
-Downloading .............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................DONE
-Verifying https://download.elastic.co/elasticsearch/release/org/elasticsearch/plugin/analysis-icu/2.4.5/analysis-icu-2.4.5.zip checksums if available ...
-Downloading .DONE
-Installed analysis-icu into /usr/share/elasticsearch/plugins/analysis-icu
-```
-
-The plugin has been installed, you will now need to restart the elasticsearch service:
-
-```bash
-# use ctrl+c to exit and then:
-
-$ docker start elastic-test
-```
-
-The restarted server should now pass the `node scripts/check_plugins.js` check, you are good to go.
 
 ### Continuous Integration
 
 Travis tests every release against all supported Node.js versions.
-
-[![Build Status](https://travis-ci.org/pelias/schema.png?branch=master)](https://travis-ci.org/pelias/schema)

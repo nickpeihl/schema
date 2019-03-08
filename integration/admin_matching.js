@@ -10,33 +10,35 @@ module.exports.tests = {};
 module.exports.tests.functional = function(test, common){
   test( 'functional', function(t){
 
-    var suite = new elastictest.Suite( null, { schema: schema } );
+    var suite = new elastictest.Suite( common.clientOpts, { schema: schema } );
     suite.action( function( done ){ setTimeout( done, 500 ); }); // wait for es to bring some shards up
 
     // index a document with all admin values
     suite.action( function( done ){
       suite.client.index({
-        index: suite.props.index, type: 'doc',
-        id: '1', body: { parent: {
-          country: 'Test Country',
-          country_a: 'TestCountry',
-          country_id: '100',
-          region: 'Test Region',
-          region_a: 'TestRegion',
-          region_id: '200',
-          county: 'Test County',
-          county_a: 'TestCounty',
-          county_id: '300',
-          locality: 'Test Locality',
-          locality_a: 'TestLocality',
-          locality_id: '400',
-          localadmin: 'Test LocalAdmin',
-          localadmin_a: 'TestLocalAdmin',
-          localadmin_id: '500',
-          neighbourhood: 'Test Neighbourhood',
-          neighbourhood_a: 'TestNeighbourhood',
-          neighbourhood_id: '600',
-        }}
+        index: suite.props.index, type: 'test',
+        id: '1', body: {
+          parent: {
+            country: 'Test Country',
+            country_a: 'TestCountry',
+            country_id: '100',
+            region: 'Test Region',
+            region_a: 'TestRegion',
+            region_id: '200',
+            county: 'Test County',
+            county_a: 'TestCounty',
+            county_id: '300',
+            locality: 'Test Locality',
+            locality_a: 'TestLocality',
+            locality_id: '400',
+            localadmin: 'Test LocalAdmin',
+            localadmin_a: 'TestLocalAdmin',
+            localadmin_id: '500',
+            neighbourhood: 'Test Neighbourhood',
+            neighbourhood_a: 'TestNeighbourhood',
+            neighbourhood_id: '600',
+          }
+        }
       }, done );
     });
 

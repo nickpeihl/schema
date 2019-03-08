@@ -1,9 +1,9 @@
-sudo: false
 language: node_js
+# Once openjdk/oraclejdk dependencies are resolved, change to dist: xenial
+dist: trusty
 notifications:
   email: false
 node_js:
-  - 6
   - 8
   - 10
 matrix:
@@ -11,13 +11,12 @@ matrix:
 env:
   matrix:
     - ES_VERSION=2.4.6
+    - ES_VERSION=5.6.12
 jdk:
   - oraclejdk8
 install:
   - mkdir /tmp/elasticsearch
-  - wget -O - https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/${ES_VERSION}/elasticsearch-${ES_VERSION}.tar.gz | tar xz --directory=/tmp/elasticsearch --strip-components=1
-  - /tmp/elasticsearch/bin/plugin install analysis-icu
-  - /tmp/elasticsearch/bin/elasticsearch --daemonize --path.data /tmp
+  - ./scripts/setup_ci.sh
   - npm i
 script:
   - npm run travis
@@ -30,9 +29,13 @@ before_install:
 before_script:
   - sleep 10
   - curl http://127.0.0.1:9200/
-  - node scripts/create_index.js -y
-after_success:
-  - npx semantic-release
+  - ./bin/create_index
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/
+jobs:
+  include:
+    - stage: release
+      node_js: 10
+      script: curl "https://raw.githubusercontent.com/pelias/ci-tools/master/semantic-release.sh" | bash -
+      if: (branch = master) AND ( type = push )
