@@ -262,7 +262,7 @@ module.exports.tests.slop = function(test, common){
       suite.client.search({
         index: suite.props.index,
         searchType: 'dfs_query_then_fetch',
-        body: { query: { match: {
+        body: { query: { match_phrase: {
           'name.default': {
             'analyzer': 'peliasPhrase',
             'query': 'Görlitzer Straße 52',
