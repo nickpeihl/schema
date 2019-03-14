@@ -16,7 +16,7 @@ module.exports.tests.functional = function(test, common){
     // index a document with all admin values
     suite.action( function( done ){
       suite.client.index({
-        index: suite.props.index, type: 'test',
+        index: suite.props.index, type: 'doc',
         id: '1', body: {
           parent: {
             country: 'Test Country',

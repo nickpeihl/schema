@@ -153,7 +153,7 @@ module.exports.tests.dynamic_templates = function(test, common) {
     t.equal(typeof schema.dynamic_templates[1].phrase, 'object', 'phrase template specified');
     var template = schema.dynamic_templates[1].phrase;
     t.equal(template.path_match, 'phrase.*');
-    t.equal(template.match_mapping_type, 'text');
+    t.equal(template.match_mapping_type, 'string');
     t.deepEqual(template.mapping, {
       type: 'text',
       analyzer: 'peliasPhrase'

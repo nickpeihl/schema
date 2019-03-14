@@ -52,7 +52,7 @@ module.exports.tests.functional = function(test, common){
 
     suite.action( function( done ){
       suite.client.index({
-        index: suite.props.index, type: 'test',
+        index: suite.props.index, type: 'doc',
         id: '4', body: { address_parts: {
           name: 'Mystery Location',
           number: 300,
@@ -211,7 +211,7 @@ module.exports.tests.venue_vs_address = function(test, common){
     // index a venue
     suite.action( function( done ){
       suite.client.index({
-        index: suite.props.index, type: 'test',
+        index: suite.props.index, type: 'doc',
         id: '1', body: {
           name: { default: 'Union Square' },
           phrase: { default: 'Union Square' }
@@ -225,7 +225,7 @@ module.exports.tests.venue_vs_address = function(test, common){
       return function( done ){
         let id = i + 100; // id offset
         suite.client.index({
-          index: suite.props.index, type: 'test',
+          index: suite.props.index, type: 'doc',
           id: String(id),
           body: {
             name: { default: `${id} Union Square` },
@@ -249,7 +249,7 @@ module.exports.tests.venue_vs_address = function(test, common){
     suite.assert( function( done ){
       suite.client.search({
         index: suite.props.index,
-        type: 'test',
+        type: 'doc',
         searchType: 'dfs_query_then_fetch',
         size: TOTAL_ADDRESS_DOCS+1,
         body: {
@@ -257,10 +257,9 @@ module.exports.tests.venue_vs_address = function(test, common){
             'bool': {
               'must': [
                 {
-                  'match': {
+                  'match_phrase': {
                     'name.default': {
                       'analyzer': 'peliasQueryFullToken',
-                      'type': 'phrase',
                       'boost': 1,
                       'slop': 3,
                       'query': 'union square'
@@ -279,10 +278,9 @@ module.exports.tests.venue_vs_address = function(test, common){
                   }
                 },
                 {
-                  'match': {
+                  'match_phrase': {
                     'phrase.default': {
                       'analyzer': 'peliasPhrase',
-                      'type': 'phrase',
                       'boost': 1,
                       'slop': 3,
                       'query': 'union square'
