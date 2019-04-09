@@ -681,12 +681,10 @@
     "doc": {
       "properties": {
         "source": {
-          "type": "text",
-          "analyzer": "keyword"
+          "type": "keyword"
         },
         "layer": {
-          "type": "text",
-          "analyzer": "keyword"
+          "type": "keyword"
         },
         "name": {
           "type": "object",
